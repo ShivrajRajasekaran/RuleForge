@@ -1,0 +1,57 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+
+# Virtual Environment
+venv/
+env/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Ollama Models (4-7 GB each!)
+models/
+*.bin
+*.gguf
+
+# Database
+*.db
+*.sqlite3
+
+# Exports (generated)
+exports/
+
+# Environment Variables
+.env
+.env.local
+
+# Test Coverage
+htmlcov/
+.coverage
+coverage.xml
+.pytest_cache/
+
+# Logs
+logs/
+*.log
+
+# Temporary
+tmp/
+*.tmp
+
+# COBOL corpus (downloaded separately — too large for git)
+data/cobol_corpus/
