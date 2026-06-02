@@ -17,6 +17,7 @@ RuleForge automatically extracts business rules from undocumented COBOL programs
 | Export Engine | Working — JSON, DMN 1.3, Markdown, CSV, HTML (44/44 files) |
 | Web Dashboard | Working — Streamlit UI (upload, rules, tables, AI docs, export) |
 | Evaluation Framework | Working — corpus metrics + grounding report (44 programs, 712 rules) |
+| Test Suite | Working — 58 pytest tests, 62% coverage |
 
 ## Quick Start
 
@@ -53,6 +54,10 @@ streamlit run src/dashboard/app.py
 # Evaluate the whole corpus → evaluation/REPORT.md + summary.json + per_file.csv
 python -m src.analysis.evaluator                  # metrics only (fast)
 python -m src.analysis.evaluator --llm-sample 3   # + grounding sample (slow)
+
+# Run the test suite
+pytest                       # 58 tests, no Ollama/corpus needed (all mocked)
+pytest --cov=src             # with coverage report
 ```
 
 ## Tech Stack

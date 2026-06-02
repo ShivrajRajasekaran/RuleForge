@@ -239,10 +239,12 @@ class NLGenerator:
 
         grounding_score = real_mentions / total_mentions  (1.0 if no mentions).
         """
-        # Candidate identifiers: 3+ char tokens, ALL CAPS or containing a hyphen.
-        candidates = set(re.findall(r"\b[A-Z][A-Z0-9]{2,}(?:-[A-Z0-9]+)*\b", text))
-        # Also catch lowercase hyphenated names the model may echo.
-        candidates |= set(re.findall(r"\b[A-Za-z][A-Za-z0-9]*-[A-Za-z0-9-]+\b", text))
+        # Candidate identifiers: whole tokens only. The look-behind/look-ahead
+        # for [\w-] is essential — without it the regex would also match inner
+        # fragments of a hyphenated name (e.g. "CUST-AGE" inside "WS-CUST-AGE"),
+        # falsely flagging a real variable as hallucinated.
+        candidates = set(re.findall(
+            r"(?<![\w-])[A-Za-z][A-Za-z0-9]*(?:-[A-Za-z0-9]+)*(?![\w-])", text))
 
         real, invented = [], []
         for token in candidates:
