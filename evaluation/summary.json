@@ -1,0 +1,44 @@
+{
+  "generated_at": "2026-06-02T22:54:27",
+  "corpus_dir": "data\\cobol_corpus",
+  "coverage": {
+    "files_found": 44,
+    "files_parsed": 44,
+    "parse_rate": 100.0,
+    "program_id_rate": 84.0909090909091,
+    "fixed_format": 10,
+    "free_format": 34
+  },
+  "extraction": {
+    "total_loc": 30175,
+    "total_rules": 712,
+    "rules_per_file_mean": 16.181818181818183,
+    "rules_per_file_median": 10.5,
+    "rules_per_file_max": 80,
+    "rules_by_type": {
+      "conditional": 560,
+      "computational": 114,
+      "validation": 38
+    },
+    "rules_by_domain": {
+      "CALCULATION": 108,
+      "VALIDATION": 103,
+      "ROUTING": 50,
+      "UNKNOWN": 332,
+      "ELIGIBILITY": 113,
+      "PRICING": 2,
+      "COMPLIANCE": 4
+    },
+    "mean_confidence": 0.6295369413288536
+  },
+  "decision_tables": {
+    "total": 528,
+    "complete": 320,
+    "completeness_rate": 60.60606060606061
+  },
+  "grounding": {
+    "samples": 3,
+    "mean_grounding": 1.0,
+    "trustworthy_rate": 100.0
+  }
+}
