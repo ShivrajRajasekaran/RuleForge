@@ -15,7 +15,7 @@ RuleForge automatically extracts business rules from undocumented COBOL programs
 | Decision Table Generator | Working — 503 tables generated |
 | LLM NL Generator | Working — Ollama/Mistral + anti-hallucination validation |
 | Export Engine | Working — JSON, DMN 1.3, Markdown, CSV, HTML (44/44 files) |
-| Web Dashboard | Planned |
+| Web Dashboard | Working — Streamlit UI (upload, rules, tables, AI docs, export) |
 
 ## Quick Start
 
@@ -45,6 +45,9 @@ python -m src.generation.nl_generator <file.cbl> 3    # Document top 3 rules
 # Export everything (JSON, DMN, Markdown, CSV, HTML) → exports/
 python -m src.export.export_engine <file.cbl>             # without LLM (fast)
 python -m src.export.export_engine <file.cbl> --with-llm 3 # include LLM docs
+
+# Launch the web dashboard (browser UI for the whole pipeline)
+streamlit run src/dashboard/app.py
 ```
 
 ## Tech Stack
