@@ -10,10 +10,10 @@ RuleForge automatically extracts business rules from undocumented COBOL programs
 
 | Module | Status |
 |--------|--------|
-| COBOL Parser (AST) | Working — parses IBM fixed & free format |
-| Rule Detector | In Progress |
-| Decision Table Generator | Planned |
-| LLM NL Generator | Planned |
+| COBOL Parser (AST) | Working — parses IBM fixed & free format (44/44 files) |
+| Rule Detector | Working — 712 rules across corpus |
+| Decision Table Generator | Working — 503 tables generated |
+| LLM NL Generator | Working — Ollama/Mistral + anti-hallucination validation |
 | Export Engine (DMN/JSON/PDF) | Planned |
 | Web Dashboard | Planned |
 
@@ -32,9 +32,15 @@ pip install -r requirements.txt
 # Download test data
 git clone https://github.com/aws-samples/aws-mainframe-modernization-carddemo data/cobol_corpus/aws_card_demo
 
-# Run parser
-python src/parser/cobol_parser.py  # Demo mode
-python src/parser/cobol_parser.py data/cobol_corpus/aws_card_demo/app/app-vsam-mq/cbl/COACCT01.cbl
+# Run the pipeline (each module is runnable standalone)
+python -m src.parser.cobol_parser <file.cbl>          # Parse → AST
+python -m src.extraction.rule_detector <file.cbl>     # Detect business rules
+python -m src.extraction.decision_table <file.cbl>    # Build decision tables
+
+# Generate plain-English docs with a local LLM (needs Ollama running)
+ollama pull mistral
+python -m src.generation.llm_client                   # Health check
+python -m src.generation.nl_generator <file.cbl> 3    # Document top 3 rules
 ```
 
 ## Tech Stack

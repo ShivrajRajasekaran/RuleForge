@@ -3,7 +3,12 @@
 networkx>=3.3
 sqlalchemy>=2.0.35
 
-# AI/LLM (for future modules)
+# AI/LLM
+# NOTE: The LLM client (src/generation/llm_client.py) talks to Ollama over its
+# REST API using ONLY the Python standard library — no pip install required.
+# You just need the Ollama app running locally + a model pulled:
+#     ollama pull mistral
+# The packages below are optional, for future LangChain-based orchestration:
 # langchain>=0.2.16
 # ollama>=0.3.3
 # chromadb>=0.5.5
