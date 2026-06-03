@@ -1,7 +1,9 @@
 # RuleForge Dependencies
-# Core
-networkx>=3.3
-sqlalchemy>=2.0.35
+# Core pipeline (parser, rule detector, decision tables, LLM client, export,
+# evaluators) is STDLIB-ONLY — nothing below is needed to run it.
+# Reserved for future work (not yet imported by any module):
+# networkx>=3.3      # planned: rule-similarity / call graphs
+# sqlalchemy>=2.0.35 # planned: persistence layer
 
 # AI/LLM
 # NOTE: The LLM client (src/generation/llm_client.py) talks to Ollama over its

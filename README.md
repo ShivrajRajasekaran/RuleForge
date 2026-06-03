@@ -61,13 +61,13 @@ python -m src.analysis.evaluator --llm-sample 3   # + grounding sample (slow)
 python -m src.analysis.ground_truth
 
 # Run the test suite
-pytest                       # 58 tests, no Ollama/corpus needed (all mocked)
+pytest                       # 64 tests, no Ollama/corpus needed (all mocked)
 pytest --cov=src             # with coverage report
 ```
 
 ## Tech Stack
 
-Python 3.11+ | tree-sitter (planned) | Ollama (Mistral 7B) | LangChain | FastAPI | Streamlit | SQLite | NetworkX
+Python 3.11+ (stdlib-only core: regex COBOL parser + `urllib`-based LLM client, no heavy deps) | Ollama (Mistral 7B, local) | Streamlit + pandas (dashboard) | pytest (tests)
 
 ## The Problem
 
@@ -83,7 +83,7 @@ COBOL Source → Parser → AST → Rule Detector → Decision Tables
                                      ↓
                               Context Builder → LLM → NL Description
                                      ↓
-                              Validator → Export (DMN/JSON/Excel/PDF)
+                              Validator → Export (DMN 1.3 / JSON / CSV / Markdown / HTML)
 ```
 
 ## License
