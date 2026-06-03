@@ -19,7 +19,8 @@ RuleForge automatically extracts business rules from undocumented COBOL programs
 | Evaluation Framework | Working — corpus metrics + grounding report (44 programs, 531 rules, 100% PROGRAM-ID) |
 | Accuracy Benchmark | Working — hand-labelled precision/recall (P 90%, R 90%, F1 90% on 5 programs) |
 | Rule Conflict Detector | Working — proves overlapping guards with different outcomes (interval/equality reasoning, stdlib-only) |
-| Test Suite | Working — 80 pytest tests, ~62% coverage |
+| Completeness Scorer | Working — enumerates condition combinations, flags decision tables with undefined inputs (47% of corpus tables incomplete) |
+| Test Suite | Working — 90 pytest tests, ~62% coverage |
 
 ## Quick Start
 
@@ -64,6 +65,10 @@ python -m src.analysis.ground_truth
 # Detect contradictory business rules (overlapping conditions, different outcomes)
 python -m src.analysis.conflict_detector data/conflict_samples/rate_conflict.cbl   # 1 conflict
 python -m src.analysis.conflict_detector data/conflict_samples/rate_noconflict.cbl # 0 (control)
+
+# Score decision-table completeness (flag inputs with undefined behaviour)
+python -m src.analysis.completeness data/completeness_samples/incomplete_if.cbl    # 50%, HIGH RISK
+python -m src.analysis.completeness data/completeness_samples/complete_eval.cbl    # complete
 
 # Run the test suite
 pytest                       # 64 tests, no Ollama/corpus needed (all mocked)
