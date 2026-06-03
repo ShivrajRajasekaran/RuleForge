@@ -1,0 +1,10 @@
+{
+  "source_file": "compute_finance.cbl",
+  "labeled_by": "manual",
+  "notes": "Three independent financial formulas, one per paragraph.",
+  "expected_rules": [
+    {"paragraph": "CALCULATE-INTEREST", "rule_type": "computational", "note": "Simple interest = P*R*T/100"},
+    {"paragraph": "CALCULATE-TAX", "rule_type": "computational", "note": "TDS = interest*rate/100"},
+    {"paragraph": "CALCULATE-NET", "rule_type": "computational", "note": "Net = interest - tax"}
+  ]
+}

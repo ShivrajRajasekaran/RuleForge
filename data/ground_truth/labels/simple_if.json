@@ -1,0 +1,8 @@
+{
+  "source_file": "simple_if.cbl",
+  "labeled_by": "manual",
+  "notes": "Single pricing decision: order total drives discount rate.",
+  "expected_rules": [
+    {"paragraph": "CALCULATE-DISCOUNT", "rule_type": "conditional", "note": "IF order total > 10000 -> 15% else 5%"}
+  ]
+}

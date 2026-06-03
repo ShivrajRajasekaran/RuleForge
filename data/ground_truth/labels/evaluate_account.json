@@ -1,0 +1,8 @@
+{
+  "source_file": "evaluate_account.cbl",
+  "labeled_by": "manual",
+  "notes": "One EVALUATE mapping account type to minimum balance and interest rate.",
+  "expected_rules": [
+    {"paragraph": "SET-ACCOUNT-PARAMS", "rule_type": "conditional", "note": "EVALUATE account type -> balance + rate"}
+  ]
+}

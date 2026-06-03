@@ -1,0 +1,65 @@
+{
+  "summary": {
+    "files": 5,
+    "labelled_rules": 10,
+    "detected_rules": 13,
+    "true_positives": 10,
+    "false_positives": 3,
+    "false_negatives": 0,
+    "precision": 0.7692,
+    "recall": 1.0,
+    "f1": 0.8696
+  },
+  "per_file": [
+    {
+      "name": "compute_finance",
+      "tp": 3,
+      "fp": 0,
+      "fn": 0,
+      "false_positives": [],
+      "false_negatives": [],
+      "parse_error": ""
+    },
+    {
+      "name": "evaluate_account",
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "false_positives": [],
+      "false_negatives": [],
+      "parse_error": ""
+    },
+    {
+      "name": "infra_only",
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "false_positives": [],
+      "false_negatives": [],
+      "parse_error": ""
+    },
+    {
+      "name": "overdraft_check",
+      "tp": 5,
+      "fp": 2,
+      "fn": 0,
+      "false_positives": [
+        "CALCULATE-BALANCE:validation",
+        "CHECK-WITHDRAWAL:conditional"
+      ],
+      "false_negatives": [],
+      "parse_error": ""
+    },
+    {
+      "name": "simple_if",
+      "tp": 1,
+      "fp": 1,
+      "fn": 0,
+      "false_positives": [
+        "CALCULATE-DISCOUNT:validation"
+      ],
+      "false_negatives": [],
+      "parse_error": ""
+    }
+  ]
+}

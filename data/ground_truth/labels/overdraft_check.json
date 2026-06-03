@@ -1,0 +1,12 @@
+{
+  "source_file": "overdraft_check.cbl",
+  "labeled_by": "manual",
+  "notes": "Mixed program. Amount validation, balance calc + approval decision, tier-based fee.",
+  "expected_rules": [
+    {"paragraph": "CHECK-WITHDRAWAL", "rule_type": "validation", "note": "Withdrawal amount must be > 0 and <= 100000"},
+    {"paragraph": "CALCULATE-BALANCE", "rule_type": "computational", "note": "New balance = account balance - withdrawal"},
+    {"paragraph": "CALCULATE-BALANCE", "rule_type": "conditional", "note": "Approve if balance >= 0 else overdraft path"},
+    {"paragraph": "CALCULATE-OD-FEE", "rule_type": "conditional", "note": "EVALUATE customer tier -> fee rate"},
+    {"paragraph": "CALCULATE-OD-FEE", "rule_type": "computational", "note": "Overdraft fee = new balance * fee rate / 100"}
+  ]
+}

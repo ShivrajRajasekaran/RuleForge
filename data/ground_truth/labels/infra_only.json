@@ -1,0 +1,6 @@
+{
+  "source_file": "infra_only.cbl",
+  "labeled_by": "manual",
+  "notes": "NEGATIVE control. Pure file I/O and status handling. No business rules. Any detection here is a false positive (tests specificity).",
+  "expected_rules": []
+}
