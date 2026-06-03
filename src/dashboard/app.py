@@ -5,6 +5,7 @@ and instantly see:
   - Program metrics (LOC, paragraphs, data items)
   - Extracted business rules (filterable table)
   - Generated decision tables
+  - Audit: rule conflicts + decision-table completeness gaps
   - Optional LLM plain-English descriptions with grounding scores
   - One-click export to JSON / DMN / Markdown / CSV / HTML
 
@@ -31,6 +32,8 @@ from src.extraction.rule_detector import RuleDetector
 from src.extraction.decision_table import DecisionTableGenerator
 from src.export.export_engine import ExportBundle, ExportEngine
 from src.generation.llm_client import LLMClient
+from src.analysis.conflict_detector import RuleConflictDetector
+from src.analysis.completeness import CompletenessScorer
 
 
 # ─────────────────────────────────────────────────────────────
@@ -59,7 +62,9 @@ def run_pipeline(source_text: str, filename: str):
     program = CobolParser().parse_file(tmp)
     rules = RuleDetector(program).detect_all_rules()
     tables = DecisionTableGenerator().generate_all(rules)
-    return program, rules, tables
+    conflicts = RuleConflictDetector().detect(rules)
+    completeness = CompletenessScorer().score_all(tables)
+    return program, rules, tables, conflicts, completeness
 
 
 def list_corpus_files():
@@ -122,20 +127,27 @@ if not source_text:
     st.stop()
 
 with st.spinner("Parsing and extracting rules..."):
-    program, rules, tables = run_pipeline(source_text, filename)
+    program, rules, tables, conflicts, completeness = run_pipeline(source_text, filename)
 
 # ── Metric cards ──
-c1, c2, c3, c4, c5 = st.columns(5)
+c1, c2, c3, c4, c5, c6, c7 = st.columns(7)
 c1.metric("Lines of Code", f"{program.loc:,}")
 c2.metric("Paragraphs", len(program.paragraphs))
 c3.metric("Data Items", len(program.data_items))
 c4.metric("Business Rules", len(rules))
 c5.metric("Decision Tables", len(tables))
+c6.metric("Rule Conflicts", len(conflicts.conflicts),
+          delta="clean" if not conflicts.has_conflicts else None,
+          delta_color="off")
+c7.metric("Incomplete Tables", completeness.num_incomplete,
+          delta=f"{len(completeness.high_risk)} high-risk" if completeness.high_risk else "clean",
+          delta_color="inverse" if completeness.high_risk else "off")
 
 st.divider()
 
-tab_rules, tab_tables, tab_llm, tab_export, tab_source = st.tabs(
-    ["📋 Rules", "🔀 Decision Tables", "🧠 AI Descriptions", "📦 Export", "📄 Source"]
+tab_rules, tab_tables, tab_audit, tab_llm, tab_export, tab_source = st.tabs(
+    ["📋 Rules", "🔀 Decision Tables", "🛡️ Audit", "🧠 AI Descriptions",
+     "📦 Export", "📄 Source"]
 )
 
 # ── Tab 1: Rules ──
@@ -187,7 +199,72 @@ with tab_tables:
                              f"({t.num_conditions} conditions × {t.num_rules} rules)"):
                 st.code(t.to_text(), language="text")
 
-# ── Tab 3: AI Descriptions ──
+# ── Tab 3: Audit (conflicts + completeness) ──
+with tab_audit:
+    st.subheader("⚔️ Rule Conflicts")
+    st.caption(
+        "Pairs of rules whose conditions can be true at the same time but whose "
+        "outcomes differ — the program resolves them silently by execution order, "
+        "so the business specification is ambiguous."
+    )
+    if conflicts.has_conflicts:
+        st.error(f"{len(conflicts.conflicts)} conflict(s) detected.")
+        for k, c in enumerate(conflicts.conflicts, 1):
+            with st.expander(
+                f"Conflict {k}: {c.rule_a.paragraph_name} ↔ {c.rule_b.paragraph_name} "
+                f"on {{{', '.join(c.shared_variables)}}}"
+            ):
+                st.write(c.reason)
+                st.code(c.rule_a.source_code.strip(), language="text")
+                st.code(c.rule_b.source_code.strip(), language="text")
+    else:
+        st.success("No provable rule conflicts detected.")
+    st.caption(
+        f"Conservative check: {conflicts.rules_modeled} of {conflicts.rules_considered} "
+        "rules were modelable (others use OR / nesting / computed conditions and are "
+        "skipped rather than guessed)."
+    )
+
+    st.divider()
+    st.subheader("🧩 Decision-Table Completeness")
+    st.caption(
+        "Every combination of a table's conditions should map to a defined outcome. "
+        "Gaps mean inputs with undefined business behaviour."
+    )
+    if not completeness.tables:
+        st.info("No decision tables to score.")
+    else:
+        m1, m2, m3 = st.columns(3)
+        m1.metric("Complete", completeness.num_complete)
+        m2.metric("Incomplete", completeness.num_incomplete)
+        mc = completeness.mean_coverage
+        m3.metric("Mean coverage", f"{mc:.0%}" if mc is not None else "n/a")
+
+        cov_df = pd.DataFrame([
+            {
+                "Paragraph": t.table_name,
+                "Type": t.table_type,
+                "Verdict": t.verdict,
+                "Coverage": (round(t.coverage, 2) if t.coverage is not None else None),
+                "High risk": "⚠️" if t.is_high_risk else "",
+                "Note": t.note,
+            }
+            for t in completeness.tables
+        ])
+        st.dataframe(cov_df, use_container_width=True, hide_index=True)
+
+        gaps = [t for t in completeness.tables if t.missing]
+        if gaps:
+            st.markdown("**Undefined input combinations**")
+            for t in gaps:
+                for m in t.missing:
+                    st.markdown(f"- `{t.table_name}` → {m}")
+        st.caption(
+            "Boolean tables assume condition independence, so a flagged gap is an "
+            "upper bound — verify it is reachable before acting on it."
+        )
+
+# ── Tab 4: AI Descriptions ──
 with tab_llm:
     st.write("Generate plain-English descriptions with the local LLM. "
              "CPU inference is slow (~5–90s per rule), so pick a small number.")
@@ -223,7 +300,7 @@ with tab_llm:
                 st.caption(f"⚠️ Flagged (not in source): {', '.join(d.hallucinated_terms)}")
             st.divider()
 
-# ── Tab 4: Export ──
+# ── Tab 5: Export ──
 with tab_export:
     st.write("Export the full analysis to standard formats.")
     include_llm = st.checkbox(
@@ -251,7 +328,7 @@ with tab_export:
                 use_container_width=True,
             )
 
-# ── Tab 5: Source ──
+# ── Tab 6: Source ──
 with tab_source:
     st.caption(f"{filename} · {program.loc:,} lines")
     st.code(source_text, language="cobol" if False else "text")

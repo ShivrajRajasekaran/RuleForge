@@ -15,7 +15,7 @@ RuleForge automatically extracts business rules from undocumented COBOL programs
 | Decision Table Generator | Working — 426 tables generated |
 | LLM NL Generator | Working — Ollama/Mistral + anti-hallucination validation |
 | Export Engine | Working — JSON, DMN 1.3, Markdown, CSV, HTML (44/44 files) |
-| Web Dashboard | Working — Streamlit UI (upload, rules, tables, AI docs, export) |
+| Web Dashboard | Working — Streamlit UI (upload, rules, tables, audit: conflicts + completeness, AI docs, export) |
 | Evaluation Framework | Working — corpus metrics + grounding report (44 programs, 531 rules, 100% PROGRAM-ID) |
 | Accuracy Benchmark | Working — hand-labelled precision/recall (P 90%, R 90%, F1 90% on 5 programs) |
 | Rule Conflict Detector | Working — proves overlapping guards with different outcomes (interval/equality reasoning, stdlib-only) |
