@@ -1,6 +1,6 @@
 # RuleForge — Evaluation Report
 
-*Generated 2026-06-03 11:02 over `data\cobol_corpus`*
+*Generated 2026-06-03 11:08 over `data\cobol_corpus`*
 
 ## 1. Corpus Coverage
 
