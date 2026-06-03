@@ -151,11 +151,40 @@ class RuleDetector:
         # Remove low-confidence rules
         rules = [r for r in rules if r.confidence >= 0.4]
 
+        # Collapse duplicates: a comparison like `IF X >= 0` is detected both as
+        # a standalone validation AND as part of the enclosing conditional. They
+        # describe the same source, so keep only the larger (enclosing) rule.
+        rules = self._dedupe_overlapping(rules)
+
         # Assign business domains
         for rule in rules:
             rule.domain = self._classify_domain(rule)
 
         return rules
+
+    def _dedupe_overlapping(self, rules: List[DetectedRule]) -> List[DetectedRule]:
+        """Drop a rule whose source code is wholly contained in a larger rule
+        from the same paragraph.
+
+        The detector's type-specific passes can flag the same lines twice — most
+        commonly a numeric comparison counted as both a VALIDATION and as part of
+        a CONDITIONAL decision. Reporting both inflates the rule count and hurts
+        precision. We keep the enclosing rule (it carries the full business
+        decision) and discard the fragment.
+        """
+        # Largest source first, so enclosing rules are seen before fragments.
+        ordered = sorted(rules, key=lambda r: len(r.source_code), reverse=True)
+        kept: List[DetectedRule] = []
+        for rule in ordered:
+            src = " ".join(rule.source_code.upper().split())
+            if any(
+                src != " ".join(k.source_code.upper().split())
+                and src in " ".join(k.source_code.upper().split())
+                for k in kept
+            ):
+                continue  # fragment of an already-kept rule
+            kept.append(rule)
+        return kept
 
     def _is_infrastructure_paragraph(self, paragraph: Paragraph) -> bool:
         """Check if paragraph is infrastructure (not business logic)."""

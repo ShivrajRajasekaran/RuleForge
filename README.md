@@ -11,13 +11,13 @@ RuleForge automatically extracts business rules from undocumented COBOL programs
 | Module | Status |
 |--------|--------|
 | COBOL Parser (AST) | Working — parses IBM fixed & free format (44/44 files) |
-| Rule Detector | Working — 712 rules across corpus |
-| Decision Table Generator | Working — 503 tables generated |
+| Rule Detector | Working — 531 rules across corpus (overlapping duplicates collapsed) |
+| Decision Table Generator | Working — 426 tables generated |
 | LLM NL Generator | Working — Ollama/Mistral + anti-hallucination validation |
 | Export Engine | Working — JSON, DMN 1.3, Markdown, CSV, HTML (44/44 files) |
 | Web Dashboard | Working — Streamlit UI (upload, rules, tables, AI docs, export) |
-| Evaluation Framework | Working — corpus metrics + grounding report (44 programs, 712 rules, 100% PROGRAM-ID) |
-| Accuracy Benchmark | Working — hand-labelled precision/recall (P 76.9%, R 100%, F1 87.0% on 5 programs) |
+| Evaluation Framework | Working — corpus metrics + grounding report (44 programs, 531 rules, 100% PROGRAM-ID) |
+| Accuracy Benchmark | Working — hand-labelled precision/recall (P 90%, R 90%, F1 90% on 5 programs) |
 | Test Suite | Working — 64 pytest tests, ~62% coverage |
 
 ## Quick Start

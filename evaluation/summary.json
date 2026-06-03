@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-03T10:36:54",
+  "generated_at": "2026-06-03T11:02:58",
   "corpus_dir": "data\\cobol_corpus",
   "coverage": {
     "files_found": 44,
@@ -11,30 +11,30 @@
   },
   "extraction": {
     "total_loc": 30175,
-    "total_rules": 712,
-    "rules_per_file_mean": 16.181818181818183,
-    "rules_per_file_median": 10.5,
-    "rules_per_file_max": 80,
+    "total_rules": 531,
+    "rules_per_file_mean": 12.068181818181818,
+    "rules_per_file_median": 8.0,
+    "rules_per_file_max": 66,
     "rules_by_type": {
-      "conditional": 560,
-      "computational": 114,
-      "validation": 38
+      "conditional": 458,
+      "computational": 66,
+      "validation": 7
     },
     "rules_by_domain": {
-      "CALCULATION": 108,
-      "VALIDATION": 103,
-      "ROUTING": 50,
-      "UNKNOWN": 332,
-      "ELIGIBILITY": 113,
+      "CALCULATION": 76,
+      "VALIDATION": 75,
+      "ROUTING": 43,
+      "UNKNOWN": 252,
+      "ELIGIBILITY": 80,
       "PRICING": 2,
-      "COMPLIANCE": 4
+      "COMPLIANCE": 3
     },
-    "mean_confidence": 0.6295369413288536
+    "mean_confidence": 0.6457821675989796
   },
   "decision_tables": {
-    "total": 528,
-    "complete": 320,
-    "completeness_rate": 60.60606060606061
+    "total": 426,
+    "complete": 276,
+    "completeness_rate": 64.78873239436619
   },
   "grounding": null
 }
