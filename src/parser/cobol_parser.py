@@ -116,15 +116,48 @@ class CobolParser:
         return cleaned
 
     def _extract_program_id(self, lines: List[str]) -> str:
-        """Find PROGRAM-ID in IDENTIFICATION DIVISION."""
-        for line in lines:
-            upper = line.upper().strip()
-            if 'PROGRAM-ID' in upper:
-                # Handle: PROGRAM-ID. COACCT01 IS INITIAL.
-                match = re.search(r'PROGRAM-ID[\.\s]+(\w+)', upper)
-                if match:
-                    return match.group(1)
+        """Find PROGRAM-ID in IDENTIFICATION DIVISION.
+
+        Handles both layouts:
+            PROGRAM-ID. COACCT01 IS INITIAL.   (name on same line)
+            PROGRAM-ID.                         (name on a following line)
+                COACTUPC.
+        """
+        for i, line in enumerate(lines):
+            upper = line.upper()
+            if 'PROGRAM-ID' not in upper:
+                continue
+
+            # Take everything after the PROGRAM-ID keyword on this line, then
+            # spill into following lines until the name token is found. The
+            # division header ends at the first period, so we only need to scan
+            # a few non-empty lines.
+            after = upper.split('PROGRAM-ID', 1)[1]
+            window = after
+            j = i + 1
+            while not self._first_program_name(window) and j < len(lines) and j <= i + 5:
+                window += ' ' + lines[j].upper()
+                j += 1
+
+            name = self._first_program_name(window)
+            if name:
+                return name
         return "UNKNOWN"
+
+    @staticmethod
+    def _first_program_name(text: str) -> str:
+        """Return the first valid COBOL program-name token in ``text``.
+
+        Skips the leading separator period after PROGRAM-ID and ignores the
+        optional ``IS INITIAL``/``IS COMMON`` clause words.
+        """
+        # A program name: letter-led, letters/digits/hyphens. The IBM compiler
+        # also allows all-caps member names like COACTUPC.
+        for token in re.findall(r'[A-Za-z][A-Za-z0-9-]*', text):
+            if token in ('IS', 'INITIAL', 'COMMON', 'RECURSIVE'):
+                continue
+            return token
+        return ""
 
     def _extract_paragraphs(self, lines: List[str]) -> List[Paragraph]:
         """Extract paragraph names and boundaries from PROCEDURE DIVISION.

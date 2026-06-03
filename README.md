@@ -16,7 +16,7 @@ RuleForge automatically extracts business rules from undocumented COBOL programs
 | LLM NL Generator | Working — Ollama/Mistral + anti-hallucination validation |
 | Export Engine | Working — JSON, DMN 1.3, Markdown, CSV, HTML (44/44 files) |
 | Web Dashboard | Working — Streamlit UI (upload, rules, tables, AI docs, export) |
-| Evaluation Framework | Working — corpus metrics + grounding report (44 programs, 712 rules) |
+| Evaluation Framework | Working — corpus metrics + grounding report (44 programs, 712 rules, 100% PROGRAM-ID) |
 | Test Suite | Working — 58 pytest tests, 62% coverage |
 
 ## Quick Start

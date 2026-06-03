@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-06-02T22:54:27",
+  "generated_at": "2026-06-03T10:32:55",
   "corpus_dir": "data\\cobol_corpus",
   "coverage": {
     "files_found": 44,
     "files_parsed": 44,
     "parse_rate": 100.0,
-    "program_id_rate": 84.0909090909091,
+    "program_id_rate": 100.0,
     "fixed_format": 10,
     "free_format": 34
   },
@@ -36,9 +36,5 @@
     "complete": 320,
     "completeness_rate": 60.60606060606061
   },
-  "grounding": {
-    "samples": 3,
-    "mean_grounding": 1.0,
-    "trustworthy_rate": 100.0
-  }
+  "grounding": null
 }

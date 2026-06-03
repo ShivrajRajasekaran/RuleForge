@@ -1,6 +1,6 @@
 # RuleForge — Evaluation Report
 
-*Generated 2026-06-02 22:54 over `data\cobol_corpus`*
+*Generated 2026-06-03 10:32 over `data\cobol_corpus`*
 
 ## 1. Corpus Coverage
 
@@ -8,7 +8,7 @@
 |--------|-------|
 | COBOL files found | 44 |
 | Parsed without error | 44 (100.0%) |
-| PROGRAM-ID detected | 37 (84.1%) |
+| PROGRAM-ID detected | 44 (100.0%) |
 | Fixed-format programs | 10 |
 | Free-format programs | 34 |
 | Total lines of COBOL | 30,175 |
@@ -49,16 +49,6 @@
 |--------|-------|
 | Tables generated | 528 |
 | Complete (cover ELSE/OTHER) | 320 (60.6%) |
-
-## 4. LLM Grounding (Anti-Hallucination)
-
-| Metric | Value |
-|--------|-------|
-| Rules sampled | 3 |
-| Mean grounding score | 1.00 |
-| Trustworthy (≥80% grounded) | 3 (100.0%) |
-
-> Grounding score = fraction of COBOL identifiers the LLM mentioned that actually exist in the source program. A low score flags potential hallucination for human review.
 
 ## Interpretation
 
